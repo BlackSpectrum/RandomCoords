@@ -1,0 +1,4 @@
+name: RandomCoords
+main: randomcoords.RandomCoords
+version: 0.1
+depend: [ProtocolLib]
