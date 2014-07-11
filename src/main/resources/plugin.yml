@@ -1,0 +1,5 @@
+name: ${project.name}
+main: ${project.groupId}.randomcoords.RandomCoords
+version: ${project.version}
+author: Mats391
+depend: [ProtocolLib]

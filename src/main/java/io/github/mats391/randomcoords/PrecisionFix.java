@@ -1,4 +1,4 @@
-package it.github.mats391.randomcoords;
+package io.github.mats391.randomcoords;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
