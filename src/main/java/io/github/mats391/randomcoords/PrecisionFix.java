@@ -4,18 +4,20 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.comphenix.protocol.events.PacketEvent;
 
-public class PrecisionFix implements Listener
+public class PrecisionFix
 {
+
+	private static final ConcurrentHashMap<UUID, double[]>	playerPositions	= new ConcurrentHashMap<UUID, double[]>();
 
 	public static void clean( final Player player ) {
 		playerPositions.remove( player.getUniqueId() );
+	}
+
+	public static void clear() {
+		playerPositions.clear();
 	}
 
 	public static void onClientChangePos( final PacketEvent event ) {
@@ -41,10 +43,4 @@ public class PrecisionFix implements Listener
 		playerPositions.put( event.getPlayer().getUniqueId(), new double[] { curr_x, curr_z } );
 	}
 
-	private static final ConcurrentHashMap<UUID, double[]>	playerPositions	= new ConcurrentHashMap<UUID, double[]>();
-
-	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerQuit( final PlayerQuitEvent event ) {
-		clean( event.getPlayer() );
-	}
 }

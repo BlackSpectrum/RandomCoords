@@ -36,28 +36,6 @@ public class Translate
 		}
 	}
 
-	private static boolean isSpecialMove( final PacketEvent event ) {
-		final double y = event.getPacket().getDoubles().read( 1 ).doubleValue();
-		final double s = event.getPacket().getDoubles().read( 3 ).doubleValue();
-
-		if ( y == -999.0D && s == -999.0D )
-			return true;
-
-		return false;
-	}
-
-	private static boolean isSpecialPlace( final PacketEvent event ) {
-		final int x = event.getPacket().getIntegers().read( 0 );
-		final int y = event.getPacket().getIntegers().read( 1 );
-		final int z = event.getPacket().getIntegers().read( 2 );
-		final int d = event.getPacket().getIntegers().read( 3 );
-
-		if ( x == -1 && y == 255 && z == -1 && d == 255 )
-			return true;
-
-		return false;
-	}
-
 	public static void outgoing( final PacketEvent event ) {
 		switch ( event.getPacketType().name() ) {
 		case "SPAWN_POSITION":
@@ -127,6 +105,28 @@ public class Translate
 		case "OPEN_SIGN_ENTITY":
 			sendInt( event, 0 );
 		}
+	}
+
+	private static boolean isSpecialMove( final PacketEvent event ) {
+		final double y = event.getPacket().getDoubles().read( 1 ).doubleValue();
+		final double s = event.getPacket().getDoubles().read( 3 ).doubleValue();
+
+		if ( y == -999.0D && s == -999.0D )
+			return true;
+
+		return false;
+	}
+
+	private static boolean isSpecialPlace( final PacketEvent event ) {
+		final int x = event.getPacket().getIntegers().read( 0 );
+		final int y = event.getPacket().getIntegers().read( 1 );
+		final int z = event.getPacket().getIntegers().read( 2 );
+		final int d = event.getPacket().getIntegers().read( 3 );
+
+		if ( x == -1 && y == 255 && z == -1 && d == 255 )
+			return true;
+
+		return false;
 	}
 
 	private static void recvDouble( final PacketEvent event, final int index ) {

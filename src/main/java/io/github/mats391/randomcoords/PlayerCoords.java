@@ -5,10 +5,15 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 
-public class PlayerCoords implements Listener
+public class PlayerCoords
 {
+
+	private static ConcurrentHashMap<UUID, int[]>	playerCoords	= new ConcurrentHashMap<UUID, int[]>();
+
+	private final static Random						rand			= new Random();
+
+	private static final int						MINIMUM_OFFSET	= -7500;
 
 	public static void addNewPlayer( final Player player ) {
 		final int offsetX = MINIMUM_OFFSET + rand.nextInt( -2 * MINIMUM_OFFSET );
@@ -20,6 +25,10 @@ public class PlayerCoords implements Listener
 
 	public static void clean( final Player player ) {
 		playerCoords.remove( player.getUniqueId() );
+	}
+
+	public static void clear() {
+		playerCoords.clear();
 	}
 
 	public static int getChunkX( final Player player ) {
@@ -53,11 +62,5 @@ public class PlayerCoords implements Listener
 	private static int roundToClosest16( final double d ) {
 		return (int) ( d / 16 ) * 16;
 	}
-
-	private static ConcurrentHashMap<UUID, int[]>	playerCoords	= new ConcurrentHashMap<UUID, int[]>();
-
-	private final static Random						rand			= new Random();
-
-	private static final int						MINIMUM_OFFSET	= -7500;
 
 }

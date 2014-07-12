@@ -1,7 +1,6 @@
 package io.github.mats391.randomcoords;
 
 import java.util.HashSet;
-import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -24,7 +23,11 @@ import com.comphenix.protocol.reflect.StructureModifier;
 public class RandomCoords extends JavaPlugin implements Listener
 {
 
-	public static final Logger	log	= Logger.getLogger( "Minecraft" );
+	@Override
+	public void onDisable() {
+		PrecisionFix.clear();
+		PlayerCoords.clear();
+	}
 
 	@Override
 	public void onEnable() {
@@ -76,6 +79,12 @@ public class RandomCoords extends JavaPlugin implements Listener
 
 			pm.addPacketListener( new PacketAdapter( paramsServer ) {
 
+				@Override
+				public void onPacketSending( final PacketEvent event ) {
+					event.setPacket( this.clone( event.getPacket() ) );
+					Translate.outgoing( event );
+				}
+
 				private PacketContainer clone( final PacketContainer packet ) {
 					final PacketContainer copy = pm.createPacket( packet.getType() );
 					final StructureModifier<Object> src = packet.getModifier();
@@ -83,12 +92,6 @@ public class RandomCoords extends JavaPlugin implements Listener
 					for ( int i = 0; i < src.size(); i++ )
 						dest.write( i, src.read( i ) );
 					return copy;
-				}
-
-				@Override
-				public void onPacketSending( final PacketEvent event ) {
-					event.setPacket( this.clone( event.getPacket() ) );
-					Translate.outgoing( event );
 				}
 			} );
 		}// End Server Packets
