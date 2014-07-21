@@ -1,4 +1,4 @@
-package io.github.mats391.randomcoords;
+package eu.blackspectrum.randomcoords;
 
 import java.util.HashSet;
 
@@ -18,16 +18,19 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.injector.GamePhase;
-import com.comphenix.protocol.reflect.StructureModifier;
 
 public class RandomCoords extends JavaPlugin implements Listener
 {
+
 
 	@Override
 	public void onDisable() {
 		PrecisionFix.clear();
 		PlayerCoords.clear();
 	}
+
+
+
 
 	@Override
 	public void onEnable() {
@@ -79,20 +82,17 @@ public class RandomCoords extends JavaPlugin implements Listener
 
 			pm.addPacketListener( new PacketAdapter( paramsServer ) {
 
+
 				@Override
 				public void onPacketSending( final PacketEvent event ) {
-					event.setPacket( this.clone( event.getPacket() ) );
-					Translate.outgoing( event );
+
+					final PacketContainer packet = event.getPacket().shallowClone();
+
+					event.setPacket( packet );
+
+					Translate.outgoing( packet, event.getPlayer() );
 				}
 
-				private PacketContainer clone( final PacketContainer packet ) {
-					final PacketContainer copy = pm.createPacket( packet.getType() );
-					final StructureModifier<Object> src = packet.getModifier();
-					final StructureModifier<Object> dest = copy.getModifier();
-					for ( int i = 0; i < src.size(); i++ )
-						dest.write( i, src.read( i ) );
-					return copy;
-				}
 			} );
 		}// End Server Packets
 
@@ -116,11 +116,12 @@ public class RandomCoords extends JavaPlugin implements Listener
 
 			pm.addPacketListener( new PacketAdapter( paramsClient ) {
 
+
 				@Override
 				public void onPacketReceiving( final PacketEvent event ) {
 					try
 					{
-						Translate.incoming( event );
+						Translate.incoming( event.getPacket(), event.getPlayer() );
 					}
 					catch ( final UnsupportedOperationException e )
 					{
@@ -130,6 +131,9 @@ public class RandomCoords extends JavaPlugin implements Listener
 			} );
 		}// End client packets
 	}
+
+
+
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerQuit( final PlayerQuitEvent event ) {
