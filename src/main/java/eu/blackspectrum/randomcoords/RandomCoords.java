@@ -93,7 +93,7 @@ public class RandomCoords extends JavaPlugin implements Listener
 					PacketContainer packet = event.getPacket();
 
 					if ( packet.getType().equals( PacketType.Play.Server.TILE_ENTITY_DATA ) )
-						packet = RandomCoords.this.clonePacket( event.getPacket() );
+						packet = RandomCoords.this.cloneTileEntityPacket( event.getPacket() );
 					else
 						packet = event.getPacket().shallowClone();
 
@@ -155,7 +155,7 @@ public class RandomCoords extends JavaPlugin implements Listener
 
 
 
-	private PacketContainer clonePacket( final PacketContainer packet ) {
+	private PacketContainer cloneTileEntityPacket( final PacketContainer packet ) {
 		final PacketContainer newPacket = new PacketContainer( packet.getType() );
 
 		int i = 0;
