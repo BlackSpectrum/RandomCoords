@@ -284,10 +284,17 @@ public class Translate
 
 
 
-	private static void sendTileEntityData( final PacketContainer packet, final Player player ) {
-		sendInt( packet, player, 0 );
+	private static void sendTileEntityData( final PacketContainer packet, final Player player ) {		
+		final int curr_x = packet.getIntegers().read( 0 );
+		final int curr_z = packet.getIntegers().read( 2 );
+		
+		packet.getIntegers().write( 0, curr_x - PlayerCoords.getX( player ) );
+		packet.getIntegers().write( 2, curr_z - PlayerCoords.getZ( player ) );
+		
 		final NbtCompound nbt = (NbtCompound) packet.getNbtModifier().read( 0 );
-		nbt.put( "x", nbt.getInteger( "x" ) - PlayerCoords.getX( player ) );
-		nbt.put( "z", nbt.getInteger( "z" ) - PlayerCoords.getZ( player ) );
+		nbt.put( "x", curr_x - PlayerCoords.getX( player ) );
+		nbt.put( "z", curr_z - PlayerCoords.getZ( player ) );
+		
+		packet.getNbtModifier().write( 0, nbt );
 	}
 }

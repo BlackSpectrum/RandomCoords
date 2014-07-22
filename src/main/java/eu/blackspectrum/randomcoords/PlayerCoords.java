@@ -85,7 +85,7 @@ public class PlayerCoords
 
 
 	private static int roundToClosest16( final double d ) {
-		return (int) ( d / 16 ) * 16;
+		return (int) ( Math.round( ( d / 16f ) ) * 16 );
 	}
 
 }
