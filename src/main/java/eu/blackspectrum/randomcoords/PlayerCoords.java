@@ -14,7 +14,7 @@ public class PlayerCoords
 
 	private final static Random						rand			= new Random();
 
-	private static final int						MINIMUM_OFFSET	= -7500;
+	private static final int						MINIMUM_OFFSET	= -12500;
 
 
 
@@ -85,7 +85,7 @@ public class PlayerCoords
 
 
 	private static int roundToClosest16( final double d ) {
-		return (int) ( Math.round( ( d / 16f ) ) * 16 );
+		return (int) ( Math.round( d / 16f ) * 16 );
 	}
 
 }
