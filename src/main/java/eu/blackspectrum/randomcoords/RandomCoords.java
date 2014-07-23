@@ -18,6 +18,7 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.injector.GamePhase;
+import com.comphenix.protocol.wrappers.nbt.NbtBase;
 
 public class RandomCoords extends JavaPlugin implements Listener
 {
@@ -89,10 +90,12 @@ public class RandomCoords extends JavaPlugin implements Listener
 				@Override
 				public void onPacketSending( final PacketEvent event ) {
 
-					PacketContainer packet = event.getPacket().shallowClone();
+					PacketContainer packet;
 
-					if ( packet.getType().equals( PacketType.Play.Server.TILE_ENTITY_DATA ) )
-						packet = RandomCoords.this.cloneNbt( event.getPacket() );
+					if ( event.getPacket().getType().name().equals( "TILE_ENTITY_DATA" ) )
+						packet = RandomCoords.this.cloneTileEntityData( event.getPacket() );
+					else
+						packet = event.getPacket().shallowClone();
 
 					event.setPacket( packet );
 
@@ -152,10 +155,22 @@ public class RandomCoords extends JavaPlugin implements Listener
 
 
 
-	private PacketContainer cloneNbt( final PacketContainer packet ) {
+	private PacketContainer cloneTileEntityData( final PacketContainer packet ) {
 		final PacketContainer newPacket = new PacketContainer( packet.getType() );
 
-		newPacket.getNbtModifier().write( 0, packet.getNbtModifier().read( 0 ).deepClone() );
+		int i = 0;
+		for ( final Object obj : packet.getModifier().getValues() )
+		{
+			newPacket.getModifier().write( i, obj );
+			i++;
+		}
+
+		i = 0;
+		for ( final NbtBase<?> obj : packet.getNbtModifier().getValues() )
+		{
+			newPacket.getNbtModifier().write( i, obj.deepClone() );
+			i++;
+		}
 
 		return newPacket;
 	}
