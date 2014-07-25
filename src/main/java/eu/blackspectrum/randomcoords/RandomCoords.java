@@ -42,9 +42,6 @@ public class RandomCoords extends JavaPlugin implements Listener
 
 		// /Server side packets
 		{
-			this.getServer().getLogger()
-					.info( PacketType.fromCurrent( PacketType.Protocol.PLAY, PacketType.Sender.SERVER, 53, 132 ).name() );
-
 			final PacketAdapter.AdapterParameteters paramsServer = PacketAdapter.params();
 			paramsServer.plugin( this );
 			paramsServer.connectionSide( ConnectionSide.SERVER_SIDE );
