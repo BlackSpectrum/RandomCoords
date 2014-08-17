@@ -95,7 +95,7 @@ public class Translate
 			sendInt8( packet, player, 0 );
 			break;
 		case "WORLD_PARTICLES":
-			sendFloat( packet, player, 1 );
+			sendFloat( packet, player, 0 );
 			break;
 		case "SPAWN_ENTITY_WEATHER":
 			sendFixedPointNumber( packet, player, 1 );
